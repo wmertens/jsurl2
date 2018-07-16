@@ -223,3 +223,10 @@ test('never JSON bareword', () => {
 	expect(stringify('null')).toEqual('null~')
 	expect(stringify('null', {short: true})).toEqual('*null')
 })
+
+test('parse whitespace', () => {
+	expect(parse('(\n\ta~ *hello~\n\tb~ *world~\n\t)~')).toEqual({
+		a: 'hello',
+		b: 'world',
+	})
+})
