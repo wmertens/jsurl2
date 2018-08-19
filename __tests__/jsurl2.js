@@ -36,6 +36,21 @@ const cmp = (v, s, short, rich) => {
 cmp.title = (title, v, s) => `${title} ${s}`
 
 test('basics', () => {
+	cmp(
+		{
+			a: [[1, 2], [], false, true, {}],
+			c: {
+				d: 'hello',
+				e: {},
+				f: [],
+				g: true,
+				n: null,
+			},
+			b: [],
+		},
+		'(a~!!1~2~~!~_F~_T~()~c~(d~hello~e~()f~!~g~~n~_N)b~!)~',
+		'(a~!!1~2~~!~_F~_T~()~c~(d~hello~e~()f~!~g~~n~_N)b~!'
+	)
 	// basic values
 	cmp(undefined, '_U~', '_U')
 	cmp(
