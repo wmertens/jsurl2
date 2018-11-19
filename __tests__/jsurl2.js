@@ -14,7 +14,7 @@ const isJsonOk = (v, str) => {
 const cmp = (v, s, short, rich) => {
 	// regular
 	const richStr = stringify(v, {rich})
-	expect(richStr).not.toMatch(/[%?#&=\n\r\0'<\\\u2028]/)
+	expect(richStr).not.toMatch(/[%?#&=\n\r\0'<\\\u2028\u2029]/)
 
 	if (s == null) s = richStr
 	else expect([v, richStr]).toEqual([v, s]) // v added for debugging
@@ -72,9 +72,9 @@ test('basics', () => {
 	cmp('', '*~', '*')
 	cmp('hello world\u203c', 'hello_world\u203c~', 'hello_world\u203c')
 	cmp(
-		' !"#$%&\'"()*+,-./09:;<=>?@AZ[\\]^_`az{|}\n\r\0\u2028~',
-		'*_!"*H*S*.*A*""*C*D***P,-./09:;*L*E*G*Q@AZ[*B]^*_`az{|}*N*R*Z*U*-~',
-		'*_!"*H*S*.*A*""*C*D***P,-./09:;*L*E*G*Q@AZ[*B]^*_`az{|}*N*R*Z*U*-'
+		' !"#$%&\'"()*+,-./09:;<=>?@AZ[\\]^_`az{|}\n\r\0\u2028\u2029~',
+		'*_!"*H*S*.*A*""*C*D***P,-./09:;*L*E*G*Q@AZ[*B]^*_`az{|}*N*R*Z*U*V*-~',
+		'*_!"*H*S*.*A*""*C*D***P,-./09:;*L*E*G*Q@AZ[*B]^*_`az{|}*N*R*Z*U*V*-'
 	)
 	cmp(
 		'Ľồťś ǒƒ ửňìćọđé ẁћəệ!',
