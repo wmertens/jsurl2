@@ -15,18 +15,23 @@ const cmp = (v, s, short, rich) => {
 	// regular
 	const richStr = stringify(v, {rich})
 	expect(richStr).not.toMatch(/[%?#&=\n\r\0'<\\\u2028]/)
-	if (s) expect([v, richStr]).toEqual([v, s])
-	else s = richStr
+
+	if (s == null) s = richStr
+	else expect([v, richStr]).toEqual([v, s])
+
 	// roundtrip
 	expect(stringify(parse(s), {rich})).toBe(s)
+
 	// short
 	const shortStr = stringify(v, {short: true, rich})
-	if (short) expect(shortStr).toBe(short)
-	else short = shortStr
+	if (short == null) short = shortStr
+	else expect(shortStr).toBe(short)
 	expect(stringify(parse(short), {short: true, rich})).toBe(short)
+
 	// not JSON
 	expect(isJsonOk(v, richStr)).toBe(true)
 	expect(isJsonOk(v, shortStr)).toBe(true)
+
 	// Can parse the JSON version and is equivalent
 	const jsv = JSON.stringify(v)
 	if (jsv) {
