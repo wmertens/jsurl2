@@ -17,10 +17,20 @@ const cmp = (v, s, short, rich) => {
 	expect(richStr).not.toMatch(/[%?#&=\n\r\0'<\\\u2028]/)
 
 	if (s == null) s = richStr
-	else expect([v, richStr]).toEqual([v, s])
+	else expect([v, richStr]).toEqual([v, s]) // v added for debugging
 
-	// roundtrip
-	expect(stringify(parse(s), {rich})).toBe(s)
+	// roundtrip + check if valid JS string
+	try {
+		const e = eval(`'${s}'`)
+		expect(stringify(parse(e), {rich})).toBe(s)
+	} catch (err) {
+		console.log(
+			`Roundtrip failed for "${s}" which came from:\n${JSON.stringify(
+				v
+			)}\n${Buffer.from(s).toString('hex')}`
+		)
+		throw err
+	}
 
 	// short
 	const shortStr = stringify(v, {short: true, rich})
