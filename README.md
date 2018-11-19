@@ -1,8 +1,8 @@
-# JSURL
+# JSURL2
 
-JSURL aims to be a drop-in replacement for JSON encoding with better size and time characteristics.
+JSURL2 aims to be a drop-in replacement for JSON encoding with better size and time characteristics.
 
-JSURL has been designed to be
+JSURL2 has been designed to be
 
 - Fast: our test case actually outperforms native JSON
 - Compact: shorter output than JSON
@@ -42,13 +42,13 @@ JSON + URI encoding:
 %7B%22name%22%3A%22John%20Do%C3%22%2C%22age%22%3A42%2C%22user%22%3Atrue%2C%22children%22%3A%5B%22Mary%22%2C%22Bill%22%5D%7D
 ```
 
-JSURL:
+JSURL2:
 
 ```jsurl
 (name~John_Doé~age~42~user~~children~!Mary~Bill)~
 ```
 
-JSURL + URI encoding:
+JSURL2 + URI encoding:
 
 ```text
 (name~John_Do%C3%A9~age~42~user~~children~!Mary~Bill)~
@@ -65,7 +65,7 @@ npm install jsurl
 ## API
 
 ```javascript
-var JSURL = require("jsurl");
+var JSURL = require("@yaska-eu/jsurl2");
 
 // Options:
 // * `rich`: encode Date, `undefined`, `Infinity`
@@ -82,17 +82,24 @@ obj = JSURL.tryParse(str[, default][, options]);
 
 ### Upgrading from version 1
 
+JSURL2 is based in spirit on the JSURL written by Bruno Jouhier (thanks!). It has been
+optimized for size and readability. You can start using JSURL2 instead of JSURL by simply
+using this package.
+
+Things to note when upgrading:
+
 - Version 2 might need extra URI-encoding depending on your needs
-  - You can call `parse(text, {deURI: true})` to handle any URI decoding automatically. This is slower, so only do this if needed.
-- Version 1 encoded text is parsed by v2
-- Version 1 clients will _not_ be able to parse version 2 encoded text, be careful when deploying new encoded text
+  - You can call `parse(text, {deURI: true})` to handle any URI decoding automatically
+- Version 1 encoded text is _not_ parseable by v2. You need to check if the string starts with a `~` and if so, use the v1 API as described below.
+  - The reason this is not automatic is to prevent adding the v1 code to bundles
+- Version 1 clients are _not_ able to parse version 2 encoding
 
 ### Version 1
 
 The old v1 API is still available if you need to decode v1 stringifieds.
 
 ```javascript
-var JSURL1 = require("jsurl/v1");
+var JSURL1 = require("@yaska-eu/jsurl2/v1");
 
 str = JSURL1.stringify(obj);
 obj = JSURL1.parse(str);

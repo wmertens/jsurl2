@@ -1,13 +1,13 @@
 {
-	"name": "jsurl",
+	"name": "@yaska-eu/jsurl2",
 	"description": "URL friendly JSON-like formatting and parsing",
-	"version": "2.0.0-rc1",
+	"version": "2.1.0",
 	"license": "MIT",
-	"homepage": "http://github.com/Sage/jsurl",
-	"author": "Bruno Jouhier",
+	"homepage": "http://github.com/wmertens/jsurl",
+	"author": "Wout Mertens",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/Sage/jsurl.git"
+		"url": "git://github.com/wmertens/jsurl.git"
 	},
 	"main": "lib/jsurl2.js",
 	"dependencies": {},
