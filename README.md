@@ -4,7 +4,6 @@ JSURL2 aims to be a drop-in replacement for JSON encoding with better size and t
 
 JSURL2 has been designed to be
 
-- Fast: our test case actually outperforms native JSON
 - Compact: shorter output than JSON
 - Readable: it leaves accented characters unchanged and doesn't add much characters for encoding
 - URI-ready: It does not encode everything that should be URI-encoded, but it does encode all delimiters of query strings.
@@ -23,6 +22,7 @@ JSURL2 has been designed to be
   - A stringify/parse cycle generates the same output as with JSON
   - (one exception: it always returns a string, even when JSON would return `undefined`)
   - It will never generate valid JSON except when it's the correct representation
+- Fast-ish: our test suite used to outperform JSON but recent v8 optimizations made JSON faster again
 
 Given its speed and size, it is well-suited to pass JS values to scripts in HTML, like initial data after Server-Side-Rendering. To do so, embed the result inside a single-quoted string (not double-quoted) and parse that in your script.
 
