@@ -57,7 +57,7 @@ test('basics', () => {
 	// basic values
 	cmp(undefined, '_U~', '_U')
 	cmp(
-		function() {
+		function () {
 			foo()
 		},
 		'_U~',
@@ -112,7 +112,7 @@ test('basics', () => {
 	cmp(
 		[
 			undefined,
-			function() {
+			function () {
 				foo()
 			},
 			null,
@@ -126,7 +126,7 @@ test('basics', () => {
 	cmp(
 		[
 			undefined,
-			function() {
+			function () {
 				foo()
 			},
 			null,
@@ -145,7 +145,7 @@ test('basics', () => {
 	cmp(
 		{
 			a: undefined,
-			b: function() {
+			b: function () {
 				foo()
 			},
 			c: null,

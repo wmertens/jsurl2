@@ -1,10 +1,14 @@
-<!DOCTYPE HTML>
-<title>JSURL Performance </title>
+<!DOCTYPE html>
+<title>JSURL Performance</title>
 <script src="../lib/jsurl.js" type="application/javascript"></script>
 <script src="../lib/jsurl2.js" type="application/javascript"></script>
 <script>
 	const count = 200000
-	const v = { a: [[1, 2], [], false, {}, true], b: [], c: { d: 'hello', e: {}, f: [], g: true, n: null } }
+	const v = {
+		a: [[1, 2], [], false, {}, true],
+		b: [],
+		c: {d: 'hello', e: {}, f: [], g: true, n: null},
+	}
 	const JSONParse = () => {
 		const n = Date.now()
 		const s = JSON.stringify(v)
@@ -66,4 +70,7 @@
 	}
 </script>
 
-<p>Use the Chrome Devtools Timeline to profile page load. See JS console for timings.</p>
+<p>
+	Use the Chrome Devtools Timeline to profile page load. See JS console for
+	timings.
+</p>

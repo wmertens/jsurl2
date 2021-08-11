@@ -99,7 +99,7 @@ Things to note when upgrading:
 The old v1 API is still available if you need to decode v1 stringifieds.
 
 ```javascript
-var JSURL1 = require("@yaska-eu/jsurl2/v1");
+var JSURL1 = require("jsurl2/v1");
 
 str = JSURL1.stringify(obj);
 obj = JSURL1.parse(str);
@@ -139,6 +139,8 @@ Since browsers may choose to encode any character with URI escaping, and special
   - Examples that you can edit with JSON/JSURL side-by-side
   - For each example, compare with JSON: length, length when URI encoded, stringify speed, parse speed
   - Benchmark: generates random objects to encode, average space and time savings
+- Async/streaming decoding
+  - Would also allow creating initial state in a webpage without first allocating the whole string
 
 ## License
 

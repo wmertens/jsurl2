@@ -11,7 +11,7 @@ const cmp = (v, s) => {
 // basic values
 test('basics', () => {
 	cmp(undefined, undefined)
-	cmp(function() {
+	cmp(function () {
 		foo()
 	}, undefined)
 	cmp(null, '~null')
@@ -35,7 +35,7 @@ test('basics', () => {
 	cmp(
 		[
 			undefined,
-			function() {
+			function () {
 				foo()
 			},
 			null,
@@ -51,7 +51,7 @@ test('basics', () => {
 	cmp(
 		{
 			a: undefined,
-			b: function() {
+			b: function () {
 				foo()
 			},
 			c: null,
