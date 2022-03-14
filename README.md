@@ -1,5 +1,7 @@
 # JSURL2
 
+Live demo: https://cv122s.csb.app/
+
 JSURL2 aims to be a drop-in replacement for JSON encoding with better size and time characteristics.
 
 JSURL2 has been designed to be
