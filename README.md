@@ -58,10 +58,10 @@ JSURL2 + URI encoding:
 
 ## Installing
 
-The easiest way to install `jsurl` is with NPM:
+The easiest way to [install `jsurl2` is with NPM](https://www.npmjs.com/package/jsurl2):
 
 ```sh
-npm install jsurl
+npm install jsurl2
 ```
 
 ## API
