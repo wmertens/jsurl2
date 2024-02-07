@@ -27,6 +27,7 @@
 	"scripts": {
 		"test": "jest",
 		"test-watch": "jest --watch",
-		"format": "prettier -w ."
+		"format": "prettier -w .",
+		"release": "npx np"
 	}
 }
