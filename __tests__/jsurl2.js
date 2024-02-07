@@ -20,14 +20,33 @@ const cmp = (v, s, short, rich) => {
 	else expect([v, richStr]).toEqual([v, s]) // v added for debugging
 
 	// roundtrip + check if valid JS string
+	let stringified
 	try {
 		const e = eval(`'${s}'`)
-		expect(stringify(parse(e), {rich})).toBe(s)
+		stringified = stringify(parse(e), {rich})
+		expect(stringified).toBe(s)
 	} catch (err) {
 		console.log(
 			`Roundtrip failed for "${s}" which came from:\n${JSON.stringify(
 				v
-			)}\n${Buffer.from(s).toString('hex')}`
+			)}\nGot ${stringified} instead of ${s}\nhex:${Buffer.from(s).toString(
+				'hex'
+			)}`
+		)
+		throw err
+	}
+	// roundtrip URI encoded
+	const uriEncoded = encodeURIComponent(encodeURI(s))
+	try {
+		stringified = stringify(parse(uriEncoded, {deURI: true}), {rich})
+		expect(stringify(parse(uriEncoded, {deURI: true}), {rich})).toBe(s)
+	} catch (err) {
+		console.log(
+			`Roundtrip with URI encoding failed for "${s}" which came from:\n${JSON.stringify(
+				v
+			)}\nGot ${stringified} instead of ${s}\nhex:${Buffer.from(s).toString(
+				'hex'
+			)}`
 		)
 		throw err
 	}
@@ -181,6 +200,7 @@ describe('compliance', () => {
 			'(a~!!1~2~~!~_F~_T~()~c~(d~hello~e~()f~!~g~~n~_N)b~!'
 		)
 		cmp([[{a: [{b: [[1]]}]}]], '!!(a~!(b~!!1))~', '!!(a~!(b~!!1')
+		cmp({a: "b'c"}, '(a~b*"c)~', '(a~b*"c')
 	})
 
 	test('percent-escaped single quotes', () => {
@@ -201,10 +221,10 @@ describe('compliance', () => {
 
 	test('whitespace etc', () => {
 		expect(
-			parse('(a~*%00he llo ~ b~ \r \n \f \t *%251fworld~)~', {deURI: true})
+			parse('(a~*%00he llo ~ b~ \r \n *%251fw\fo\trld~)~', {deURI: true})
 		).toEqual({
 			a: 'hello',
-			b: 'world',
+			b: '\x1fw\fo\trld',
 		})
 	})
 
