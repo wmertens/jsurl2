@@ -1,5 +1,9 @@
-const blns = require('blns')
-const {stringify, parse, tryParse} = require('..')
+import blns from 'blns'
+import {stringify, parse, tryParse} from '.'
+// for testing the minified build
+// import {stringify, parse, tryParse} from '../dist/index.mjs'
+// import {stringify, parse, tryParse} from '../dist/index.js'
+import {expect, describe, test} from 'vitest'
 
 // It only produces JSON parseable values if they are the same
 const isJsonOk = (v, str) => {
@@ -11,63 +15,68 @@ const isJsonOk = (v, str) => {
 	}
 }
 // test macro, both directions
-const cmp = (v, s, short, rich) => {
+const cmp = (
+	value: any,
+	encodedRaw?: string,
+	short?: string,
+	rich?: boolean
+) => {
 	// regular
-	const richStr = stringify(v, {rich})
+	const richStr = stringify(value, {rich})
 	expect(richStr).not.toMatch(/[%?#&=\n\r\0'<\\\u2028\u2029]/)
 
-	if (s == null) s = richStr
-	else expect([v, richStr]).toEqual([v, s]) // v added for debugging
+	const encoded = encodedRaw == null ? richStr : encodedRaw
+	expect([value, richStr]).toEqual([value, encoded]) // value added for debugging
 
 	// roundtrip + check if valid JS string
 	let stringified
 	try {
-		const e = eval(`'${s}'`)
+		const e = eval(`'${encoded}'`)
 		stringified = stringify(parse(e), {rich})
-		expect(stringified).toBe(s)
+		expect(stringified).toBe(encoded)
 	} catch (err) {
 		console.log(
-			`Roundtrip failed for "${s}" which came from:\n${JSON.stringify(
-				v
-			)}\nGot ${stringified} instead of ${s}\nhex:${Buffer.from(s).toString(
-				'hex'
-			)}`
+			`Roundtrip failed for "${encoded}" which came from:\n${JSON.stringify(
+				value
+			)}\nGot ${stringified} instead of ${encoded}\nhex:${Buffer.from(
+				encoded!
+			).toString('hex')}`
 		)
 		throw err
 	}
 	// roundtrip URI encoded
-	const uriEncoded = encodeURIComponent(encodeURI(s))
+	const uriEncoded = encodeURIComponent(encodeURI(encoded!))
 	try {
 		stringified = stringify(parse(uriEncoded, {deURI: true}), {rich})
-		expect(stringify(parse(uriEncoded, {deURI: true}), {rich})).toBe(s)
+		expect(stringify(parse(uriEncoded, {deURI: true}), {rich})).toBe(encoded)
 	} catch (err) {
 		console.log(
-			`Roundtrip with URI encoding failed for "${s}" which came from:\n${JSON.stringify(
-				v
-			)}\nGot ${stringified} instead of ${s}\nhex:${Buffer.from(s).toString(
-				'hex'
-			)}`
+			`Roundtrip with URI encoding failed for "${encoded}" which came from:\n${JSON.stringify(
+				value
+			)}\nGot ${stringified} instead of ${encoded}\nhex:${Buffer.from(
+				encoded
+			).toString('hex')}`
 		)
 		throw err
 	}
 
 	// short
-	const shortStr = stringify(v, {short: true, rich})
+	const shortStr = stringify(value, {short: true, rich})
 	if (short == null) short = shortStr
 	else expect(shortStr).toBe(short)
 	expect(stringify(parse(short), {short: true, rich})).toBe(short)
 
 	// not JSON
-	expect(isJsonOk(v, richStr)).toBe(true)
-	expect(isJsonOk(v, shortStr)).toBe(true)
+	expect(isJsonOk(value, richStr)).toBe(true)
+	expect(isJsonOk(value, shortStr)).toBe(true)
 
 	// Can parse the JSON version and is equivalent
-	const jsv = JSON.stringify(v)
+	const jsv = JSON.stringify(value)
 	if (jsv) {
 		if (!rich) expect(parse(jsv)).toEqual(parse(short))
 	} else {
 		expect(jsv).toBe(undefined)
-		expect([v, s]).toEqual([v, '_U~'])
+		expect([value, encoded]).toEqual([value, '_U~'])
 	}
 }
 cmp.title = (title, v, s) => `${title} ${s}`
@@ -78,7 +87,7 @@ describe('compliance', () => {
 		cmp(undefined, '_U~', '_U')
 		cmp(
 			function () {
-				foo()
+				console.log('hello')
 			},
 			'_U~',
 			'_U'
@@ -133,7 +142,7 @@ describe('compliance', () => {
 			[
 				undefined,
 				function () {
-					foo()
+					console.log('hello')
 				},
 				null,
 				false,
@@ -147,7 +156,7 @@ describe('compliance', () => {
 			[
 				undefined,
 				function () {
-					foo()
+					console.log('hello')
 				},
 				null,
 				false,
@@ -166,7 +175,7 @@ describe('compliance', () => {
 			{
 				a: undefined,
 				b: function () {
-					foo()
+					console.log('hello')
 				},
 				c: null,
 				d: false,

@@ -1,7 +1,16 @@
 {
 	"name": "jsurl2",
-	"description": "URL friendly JSON-like formatting and parsing",
 	"version": "2.1.1",
+	"description": "URL friendly JSON-like formatting and parsing",
+	"keywords": [
+		"json",
+		"url",
+		"query",
+		"stringify",
+		"parse",
+		"serialize",
+		"deserialize"
+	],
 	"license": "MIT",
 	"homepage": "http://github.com/wmertens/jsurl2",
 	"author": "Wout Mertens",
@@ -9,25 +18,34 @@
 		"type": "git",
 		"url": "git://github.com/wmertens/jsurl2.git"
 	},
-	"main": "lib/jsurl2.js",
-	"dependencies": {},
+	"main": "dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"packageManager": "pnpm@8.15.5",
 	"devDependencies": {
+		"@rollup/plugin-terser": "^0.4.4",
+		"@types/node": "^20.11.30",
 		"blns": "^2.0.4",
-		"jest": "^27.0.6",
-		"jest-cli": "^27.0.6",
-		"prettier": "^2.3.2"
+		"prettier": "^3.2.5",
+		"terser": "^5.30.0",
+		"vite": "^5.2.6",
+		"vite-plugin-dts": "^3.8.1",
+		"vitest": "^1.4.0"
 	},
 	"files": [
-		"lib",
-		"v1.js"
+		"dist"
 	],
-	"directories": {
-		"lib": "./lib"
-	},
 	"scripts": {
-		"test": "jest",
-		"test-watch": "jest --watch",
+		"build": "vite build",
+		"bench": "vitest bench",
 		"format": "prettier -w .",
+		"test": "vitest",
 		"release": "npx np"
 	}
 }

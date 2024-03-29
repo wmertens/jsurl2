@@ -1,6 +1,7 @@
 # JSURL2
 
-Live demo: https://cv122s.csb.app/
+Live demo: https://wmertens.github.io/jsurl2/
+Live editor: https://cv122s.csb.app/
 
 JSURL2 aims to be a drop-in replacement for JSON encoding with better size and time characteristics.
 
@@ -67,7 +68,7 @@ npm install jsurl2
 ## API
 
 ```javascript
-var JSURL = require("@yaska-eu/jsurl2");
+var JSURL = require("jsurl2");
 
 // Options:
 // * `rich`: encode Date, `undefined`, `Infinity`
@@ -80,34 +81,6 @@ obj = JSURL.parse(str[, options]);
 
 // return `default` instead of throwing on error; options are passed to `parse()`
 obj = JSURL.tryParse(str[, default][, options]);
-```
-
-### Upgrading from version 1
-
-JSURL2 is based in spirit on the JSURL written by Bruno Jouhier (thanks!). It has been
-optimized for size and readability. You can start using JSURL2 instead of JSURL by simply
-using this package.
-
-Things to note when upgrading:
-
-- Version 2 might need extra URI-encoding depending on your needs
-  - You can call `parse(text, {deURI: true})` to handle any URI decoding automatically
-- Version 1 encoded text is _not_ parseable by v2. You need to check if the string starts with a `~` and if so, use the v1 API as described below.
-  - The reason this is not automatic is to prevent adding the v1 code to bundles
-- Version 1 clients are _not_ able to parse version 2 encoding
-
-### Version 1
-
-The old v1 API is still available if you need to decode v1 stringifieds.
-
-```javascript
-var JSURL1 = require("jsurl2/v1");
-
-str = JSURL1.stringify(obj);
-obj = JSURL1.parse(str);
-
-// return def instead of throwing on error
-obj = JSURL1.tryParse(str[, def]);
 ```
 
 ## Syntax

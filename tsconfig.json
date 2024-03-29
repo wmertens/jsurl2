@@ -1,0 +1,38 @@
+{
+	"compilerOptions": {
+		// Code generation, not actually used
+		"target": "ES2020",
+		"module": "ES2020",
+		"incremental": true,
+		"isolatedModules": true,
+		"outDir": "tmp",
+		"noEmit": true,
+
+		// Available types
+		"lib": ["ES2021", "DOM"],
+		"types": ["vite/client"],
+
+		// Module resolution
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "Bundler",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+
+		// Strictness
+		"strict": true,
+		"noImplicitAny": false,
+		"allowImportingTsExtensions": true,
+
+		// Check JS files too
+		"allowJs": true,
+		"checkJs": true,
+
+		// Make TS lots faster by skipping lib checks
+		"skipLibCheck": true
+
+		// Uncomment for more details in errors
+		// "extendedDiagnostics": true,
+		// "noErrorTruncation": true
+	},
+	"exclude": ["node_modules", "dist", "tmp", "coverage"]
+}
