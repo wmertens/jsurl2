@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>JSURL2 Demo</title>
+		<link rel="stylesheet" href="demo.css" type="text/css" media="screen" />
+		<script src="./index.js" type="application/javascript"></script>
+		<script>
+			function execute(src, dst, fn, withAlert) {
+				var s = document.getElementById(src).value
+				try {
+					s = fn(s)
+				} catch (ex) {
+					if (withAlert) return alert(ex.message)
+					s = ex.message
+				}
+				document.getElementById(dst).value = s
+				updatePreviews()
+			}
+			function updatePreview(id) {
+				var value = document.getElementById(id).value
+				var encoded = encodeURIComponent(value)
+				document.getElementById(id + '-preview').textContent = encoded
+				document.getElementById(id + '-length').textContent = encoded.length
+			}
+			function updatePreviews() {
+				updatePreview('json')
+				updatePreview('jsurl')
+			}
+			function json2jsurl(s) {
+				return JSURL.stringify(JSON.parse(s))
+			}
+			function jsurl2json(s) {
+				return JSON.stringify(JSURL.parse(s.replace(/\s+/g, ''), {deURI: true}))
+			}
+			function beautify(s) {
+				return JSON.stringify(JSON.parse(s), null, '  ')
+			}
+			window.addEventListener('load', function () {
+				execute('json', 'jsurl', json2jsurl)
+			})
+		</script>
+	</head>
+	<body>
+		<h1>JSURL2 Demo</h1>
+		<p>Convert JSON to JSURL and back. Use the "beautify" button to format JSON.</p>
+
+		<form>
+			<div class="playground">
+				<div class="pane">
+					<h2>JSON</h2>
+					<textarea
+						id="json"
+						oninput="javascript:execute('json', 'jsurl', json2jsurl)"
+					>{"name": "John Doé", "age": 42, "user": true, "children": ["Mary", "Bill"]}</textarea>
+					<div class="pane-actions">
+						<input
+							id="btify"
+							type="button"
+							value="beautify"
+							onclick="javascript:execute('json', 'json', beautify, true)"
+						/>
+					</div>
+					<div class="encoded-preview">
+						<div class="encoded-preview-label">
+							URL-encoded (<span id="json-length"></span> chars)
+						</div>
+						<pre id="json-preview"></pre>
+					</div>
+				</div>
+
+				<div class="pane">
+					<h2>JSURL</h2>
+					<textarea
+						id="jsurl"
+						oninput="javascript:execute('jsurl', 'json', jsurl2json)"
+					></textarea>
+					<div class="encoded-preview">
+						<div class="encoded-preview-label">
+							URL-encoded (<span id="jsurl-length"></span> chars)
+						</div>
+						<pre id="jsurl-preview"></pre>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="docs">
+			<h2>About JSURL2</h2>
+			<p>
+				JSURL2 aims to be a drop-in replacement for JSON encoding with better
+				size and time characteristics.
+			</p>
+			<p>JSURL2 has been designed to be:</p>
+			<ul>
+				<li>
+					<strong>Compact:</strong> shorter output than JSON
+				</li>
+				<li>
+					<strong>Readable:</strong> leaves accented characters unchanged and
+					doesn't add many characters for encoding
+				</li>
+				<li>
+					<strong>URI-ready:</strong> encodes all query-string delimiters so you
+					can embed it in a query string without extra URI encoding
+				</li>
+				<li>
+					<strong>Embeddable:</strong> safe to put in
+					<code>&lt;script&gt;</code> tags inside single-quoted JS strings
+					(unlike JSON); added whitespace can be stripped
+				</li>
+				<li>
+					<strong>Extensible:</strong> <code>rich</code> mode encodes/decodes
+					<code>Date</code> objects, <code>undefined</code>, <code>NaN</code>
+					and <code>Infinity</code>
+				</li>
+				<li>
+					<strong>Easy upgrade:</strong> replace <code>JSON.parse</code> with
+					<code>JSURL.parse</code> and <code>JSON.stringify</code> with
+					<code>JSURL.stringify</code>; also parses plain JSON
+				</li>
+			</ul>
+
+			<h2>Examples</h2>
+			<table class="examples-table">
+				<thead>
+					<tr>
+						<th>Format</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>JSON</td>
+						<td>
+							<code
+								>{"name": "John Doé", "age": 42, "user": true, "children":
+								["Mary", "Bill"]}</code
+							>
+						</td>
+					</tr>
+					<tr>
+						<td>JSON + URI encoding</td>
+						<td>
+							<code
+								>%7B%22name%22%3A%22John%20Do%C3%A9%22%2C%22age%22%3A42%2C%22user%22%3Atrue%2C%22children%22%3A%5B%22Mary%22%2C%22Bill%22%5D%7D</code
+							>
+						</td>
+					</tr>
+					<tr>
+						<td>JSURL2</td>
+						<td><code>(name~John_Doé~age~42~user~~children~!Mary~Bill)~</code></td>
+					</tr>
+					<tr>
+						<td>JSURL2 + URI encoding</td>
+						<td>
+							<code>(name~John_Do%C3%A9~age~42~user~~children~!Mary~Bill)~</code>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h2>API</h2>
+			<pre><code>var JSURL = require("jsurl2");
+
+// Options:
+// * `rich`: encode Date, `undefined`, `Infinity`
+// * `short`: remove optional trailing delimiters
+str = JSURL.stringify(obj[, options]);
+
+// Options:
+// * `deURI`: remove URI encoding and whitespace
+obj = JSURL.parse(str[, options]);
+
+// return `default` instead of throwing on error; options are passed to `parse()`
+obj = JSURL.tryParse(str[, default][, options]);</code></pre>
+
+			<h2>Syntax</h2>
+			<p>
+				JSURL uses the allowable characters in URI schemes for multiple purposes
+				depending on the location in the result. Some examples:
+			</p>
+			<ul>
+				<li>
+					<code>!</code> starts an array if it is the first character in a
+					value, but inside a string it is unchanged.
+				</li>
+				<li>
+					<code>~</code> and <code>)</code> are used as end-of-value and
+					end-of-object delimiters, and are illegal inside encoded values.
+				</li>
+				<li>
+					<code>*</code> starts a string, but can be left out if the first
+					string character is a-z. Inside a string, it escapes special
+					characters.
+				</li>
+				<li>
+					Whitespace is never legal, so you can strip it before parsing if it
+					can be introduced accidentally.
+				</li>
+			</ul>
+			<p>
+				JSURL has a <code>short</code> mode, which omits unnecessary ending
+				delimiters, saving a few more bytes.
+			</p>
+			<p>
+				Since browsers may choose to encode any character with URI escaping,
+				decoding will work no matter how many encodings happened, if you pass the
+				<code>deURI: true</code> option to the parser.
+			</p>
+
+			<p>
+				Source and full documentation on
+				<a href="https://github.com/wmertens/jsurl2">GitHub</a>.
+			</p>
+		</div>
+	</body>
+</html>
