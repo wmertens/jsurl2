@@ -21,4 +21,24 @@ describe('docs demo page', () => {
 			`oninput="javascript:execute('jsurl', 'json', jsurl2json)"`,
 		)
 	})
+
+	test('has viewport meta for mobile', () => {
+		expect(docsIndex).toContain(
+			'<meta name="viewport" content="width=device-width, initial-scale=1"',
+		)
+	})
+
+	test('has example content in JSON pane', () => {
+		expect(docsIndex).toContain('John Do')
+	})
+
+	test('auto-converts on page load', () => {
+		expect(docsIndex).toContain("window.addEventListener('load'")
+	})
+
+	test('includes documentation section', () => {
+		expect(docsIndex).toContain('class="docs"')
+		expect(docsIndex).toContain('<h2>API</h2>')
+		expect(docsIndex).toContain('<h2>Syntax</h2>')
+	})
 })
