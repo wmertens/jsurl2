@@ -20,6 +20,8 @@ describe('docs demo page', () => {
 		expect(docsIndex).toContain(
 			`oninput="javascript:execute('jsurl', 'json', jsurl2json)"`,
 		)
+		expect(docsIndex).toContain("s.replace(/\\s+/g, '')")
+		expect(docsIndex).toContain('{deURI: true}')
 	})
 
 	test('has viewport meta for mobile', () => {
@@ -40,5 +42,18 @@ describe('docs demo page', () => {
 		expect(docsIndex).toContain('class="docs"')
 		expect(docsIndex).toContain('<h2>API</h2>')
 		expect(docsIndex).toContain('<h2>Syntax</h2>')
+	})
+
+	test('shows URL-encoded previews for both panes', () => {
+		expect(docsIndex).toContain('id="json-preview"')
+		expect(docsIndex).toContain('id="json-length"')
+		expect(docsIndex).toContain('id="jsurl-preview"')
+		expect(docsIndex).toContain('id="jsurl-length"')
+		expect(docsIndex).toContain('updatePreviews()')
+	})
+
+	test('does not include legacy convert arrow buttons', () => {
+		expect(docsIndex).not.toContain('id="parse"')
+		expect(docsIndex).not.toContain('id="stringify"')
 	})
 })
