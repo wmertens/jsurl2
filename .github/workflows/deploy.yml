@@ -1,0 +1,33 @@
+name: Deploy docs to gh-pages
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build library
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile
+          corepack pnpm build
+          cp dist/index.js docs/index.js
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs
+          clean-exclude: pr-preview
+          force: false
