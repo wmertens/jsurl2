@@ -76,44 +76,33 @@ input[type='button']:hover {
 	text-align: center;
 }
 
-.convert-buttons {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 0.4em;
-	flex: 0 0 auto;
+.encoded-preview {
+	margin-top: 0.4em;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 0.8em;
+	color: #304f61;
 }
 
-/* On mobile, stack panes vertically and rotate arrow buttons */
+.encoded-preview-label {
+	font-weight: bold;
+	margin-bottom: 0.2em;
+}
+
+.encoded-preview pre {
+	margin: 0;
+	padding: 0.35em 0.4em;
+	max-height: 4.5em;
+	overflow: auto;
+	background: #eef4f8;
+	border: 1px solid #a0b8c8;
+	border-radius: 4px;
+	white-space: pre;
+}
+
+/* On mobile, stack panes vertically */
 @media (max-width: 600px) {
 	.playground {
 		flex-direction: column;
-	}
-
-	.convert-buttons {
-		flex-direction: row;
-		justify-content: center;
-	}
-
-	#parse::after {
-		content: '↓';
-	}
-	#parse {
-		font-size: 0;
-	}
-	#parse::after {
-		font-size: 1rem;
-	}
-
-	#stringify::after {
-		content: '↑';
-	}
-	#stringify {
-		font-size: 0;
-	}
-	#stringify::after {
-		font-size: 1rem;
 	}
 }
 
@@ -192,4 +181,3 @@ input[type='button']:hover {
 .examples-table tr:nth-child(even) td {
 	background: #eef4f8;
 }
-

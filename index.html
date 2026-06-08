@@ -16,12 +16,23 @@
 					s = ex.message
 				}
 				document.getElementById(dst).value = s
+				updatePreviews()
+			}
+			function updatePreview(id) {
+				var value = document.getElementById(id).value
+				var encoded = encodeURIComponent(value)
+				document.getElementById(id + '-preview').textContent = encoded
+				document.getElementById(id + '-length').textContent = encoded.length
+			}
+			function updatePreviews() {
+				updatePreview('json')
+				updatePreview('jsurl')
 			}
 			function json2jsurl(s) {
 				return JSURL.stringify(JSON.parse(s))
 			}
 			function jsurl2json(s) {
-				return JSON.stringify(JSURL.parse(s))
+				return JSON.stringify(JSURL.parse(s.replace(/\s+/g, ''), {deURI: true}))
 			}
 			function beautify(s) {
 				return JSON.stringify(JSON.parse(s), null, '  ')
@@ -51,23 +62,12 @@
 							onclick="javascript:execute('json', 'json', beautify, true)"
 						/>
 					</div>
-				</div>
-
-				<div class="convert-buttons">
-					<input
-						id="parse"
-						type="button"
-						value="→"
-						title="JSON to JSURL"
-						onclick="javascript:execute('json', 'jsurl', json2jsurl)"
-					/>
-					<input
-						id="stringify"
-						type="button"
-						value="←"
-						title="JSURL to JSON"
-						onclick="javascript:execute('jsurl', 'json', jsurl2json)"
-					/>
+					<div class="encoded-preview">
+						<div class="encoded-preview-label">
+							URL-encoded (<span id="json-length"></span> chars)
+						</div>
+						<pre id="json-preview"></pre>
+					</div>
 				</div>
 
 				<div class="pane">
@@ -76,6 +76,12 @@
 						id="jsurl"
 						oninput="javascript:execute('jsurl', 'json', jsurl2json)"
 					></textarea>
+					<div class="encoded-preview">
+						<div class="encoded-preview-label">
+							URL-encoded (<span id="jsurl-length"></span> chars)
+						</div>
+						<pre id="jsurl-preview"></pre>
+					</div>
 				</div>
 			</div>
 		</form>
