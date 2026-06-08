@@ -31,6 +31,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Build library
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile
+          corepack pnpm build
+          cp dist/index.js docs/index.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

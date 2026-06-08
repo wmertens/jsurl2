@@ -1,7 +1,6 @@
 # JSURL2
 
 Live demo: https://wmertens.github.io/jsurl2/
-Live editor: https://cv122s.csb.app/
 
 JSURL2 aims to be a drop-in replacement for JSON encoding with better size and time characteristics.
 
